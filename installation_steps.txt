@@ -1,0 +1,88 @@
+MySQL:
+--
+sudo apt update
+sudo apt install mysql-server
+sudo systemctl status mysql
+sudo mysql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '<ENTER THE PASSWORD HERE>';
+FLUSH PRIVILEGES;
+exit
+sudo mysql -u root -p 
+<THEN ENTER THE PASSWORD>
+--
+
+Hadoop:
+--
+ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+sudo apt-get update
+sudo apt-get install openjdk-8-jdk
+
+wget https://archive.apache.org/dist/hadoop/common/hadoop-1.2.1/hadoop-1.2.1.tar.gz
+tar -zxvf hadoop-1.2.1.tar.gz
+sudo mv hadoop-1.2.1 /usr/local/hadoop
+
+nano ~/.bashrc
+export HADOOP_PREFIX=/usr/local/hadoop/
+export PATH=$PATH:$HADOOP_PREFIX/bin
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 
+export PATH=$PATH:$JAVA_HOME
+source ~/.bashrc
+
+nano /usr/local/hadoop/conf/hadoop-env.sh
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 
+export HADOOP_OPTS=-Djava.net.preferIPV4Stack=true
+
+nano /usr/local/hadoop/conf/core-site.xml
+<property> 
+        <name>fs.default.name</name>
+        <value>hdfs://localhost:9000</value> 
+</property>
+<property> 
+       <name>hadoop.tmp.dir</name> 
+       <value>/usr/local/hadoop/tmp</value> 
+</property>
+
+nano /usr/local/hadoop/conf/hdfs-site.xml
+<property>
+     <name>dfs.replication</name> 
+     <value>1</value>
+</property> 
+
+nano /usr/local/hadoop/conf/mapred-site.xml
+<property> 
+       <name>mapred.job.tracker</name> 
+       <value>hdfs://localhost:9001</value>
+</property> 
+
+mkdir /usr/local/hadoop/tmp
+hadoop namenode -format 
+start-all.sh
+jps
+--
+
+Sqoop:
+--
+wget https://archive.apache.org/dist/sqoop/1.4.6/sqoop-1.4.6.tar.gz
+tar -xvf sqoop-1.4.6.tar.gz
+sudo mv sqoop-1.4.6 /usr/local/sqoop
+
+nano ~/.bashrc
+export SQOOP_HOME=/usr/local/sqoop
+export PATH=$PATH:$SQOOP_HOME/bin
+source ~/.bashrc
+
+mv sqoop-env-template.sh sqoop-env.sh
+
+nano sqoop-env.sh
+export HADOOP_COMMON_HOME=/usr/local/hadoop
+export HADOOP_MAPRED_HOME=/usr/local/hadoop
+
+wget http://ftp.ntu.edu.tw/MySQL/Downloads/Connector-J/mysql-connector-java-5.1.48.tar.gz
+tar -xvf mysql-connector-java-5.1.48.tar.gz
+mv mysql-connector-java-5.1.48/mysql-connector-java-5.1.48.jar /$SQOOP_HOME/lib
+wget https://repo1.maven.org/maven2/org/apache/sqoop/sqoop/1.4.6/sqoop-1.4.6-hadoop100.jar
+cp sqoop-1.4.6-hadoop100.jar /usr/local/sqoop
+--
+
