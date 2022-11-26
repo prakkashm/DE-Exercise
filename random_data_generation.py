@@ -7,7 +7,7 @@ import sqlalchemy as sa
 # Initializations
 total_transactions = 10000
 users = 200
-max_amount = 1000000000
+max_amount = 1000000
 random_transactions = []
 
 # Connecting with the database
