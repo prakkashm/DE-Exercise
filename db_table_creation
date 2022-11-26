@@ -1,0 +1,13 @@
+CREATE DATABASE epifi;
+
+CREATE TABLE transactions (
+	id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	payment_method ENUM('UPI', 'Credit Card', 'Debit Card') NOT NULL,
+	payment_from INT,
+	payment_to INT,
+	amount INT NOT NULL,
+	status ENUM('Failed', 'Declined', 'Processing', 'Initiated', 'Success') NOT NULL DEFAULT 'Initiated',
+	updated_at TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (ID),
+	CHECK (amount > 0)
+);
