@@ -1,21 +1,20 @@
-wget https://archive.apache.org/dist/sqoop/1.4.6/sqoop-1.4.6.tar.gz
-tar -xvf sqoop-1.4.6.tar.gz
-sudo mv sqoop-1.4.6 /usr/local/sqoop
+wget https://archive.apache.org/dist/sqoop/1.4.6/sqoop-1.4.6.bin__hadoop-1.0.0.tar.gz
+tar -xvf sqoop-1.4.6.bin__hadoop-1.0.0.tar.gz
+sudo mv sqoop-1.4.6.bin__hadoop-1.0.0 /usr/lib/sqoop
 
 nano ~/.bashrc
-export SQOOP_HOME=/usr/local/sqoop
+export SQOOP_HOME=/usr/lib/sqoop
 export PATH=$PATH:$SQOOP_HOME/bin
 source ~/.bashrc
 
+cd $SQOOP_HOME/conf
 mv sqoop-env-template.sh sqoop-env.sh
 
 nano sqoop-env.sh
-export HADOOP_COMMON_HOME=/usr/local/hadoop
+export HADOOP_COMMON_HOME=/usr/local/hadoop 
 export HADOOP_MAPRED_HOME=/usr/local/hadoop
 
-wget http://ftp.ntu.edu.tw/MySQL/Downloads/Connector-J/mysql-connector-java-5.1.48.tar.gz
-tar -xvf mysql-connector-java-5.1.48.tar.gz
-mv mysql-connector-java-5.1.48/mysql-connector-java-5.1.48.jar /$SQOOP_HOME/lib
-wget https://repo1.maven.org/maven2/org/apache/sqoop/sqoop/1.4.6/sqoop-1.4.6-hadoop100.jar
-cp sqoop-1.4.6-hadoop100.jar /usr/local/sqoop
-
+wget http://ftp.ntu.edu.tw/MySQL/Downloads/Connector-J/mysql-connector-java-8.0.26.tar.gz
+tar -zxf mysql-connector-java-8.0.26.tar.gz
+mv mysql-connector-java-8.0.26/mysql-connector-java-8.0.26.jar /usr/lib/sqoop/lib
+sqoop-version

@@ -1,0 +1,14 @@
+sqoop job \
+--create incrementalUpdateImportJob \
+-- import \
+--connect jdbc:mysql://localhost/epifi \
+--username hduser \
+--password mysql_PM_EC2_1 \
+--table TRANSACTIONS \
+--direct \
+--target-dir /user/hduser/transactions_hdfs \
+--incremental lastmodified \
+--check-column updated_at \
+-m 1 \
+--append \
+--verbose
