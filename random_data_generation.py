@@ -16,6 +16,7 @@ password = 'mysql_PM_EC2_1' # Enter the password here
 host = 'localhost'
 port = 3306
 database = 'epifi' # Enter the database name here
+table = 'transactions'
 
 engine = sa.create_engine(url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}", echo = False)
 db_connection = engine.connect()
@@ -48,6 +49,10 @@ def generate_random_transactions(payment_method_list, payment_status_list, user_
 if __name__ == "__main__":
     # Getting table schema
     table_schema = db_connection.execute('DESCRIBE transactions;')
+
+    # Truncating the table to test this script again and again
+    # db_connection.execute('TRUNCATE TABLE transactions;')
+
     table_columns = []
 
     for row in table_schema:
@@ -75,5 +80,24 @@ if __name__ == "__main__":
     random_transactions = random_transactions[0: total_transactions]
     random_transactions_df = pd.DataFrame(random_transactions, columns = table_columns)
 
-    random_transactions_df.to_sql(name = 'transactions', con = db_connection, if_exists = 'append', index = False)
+    random_transactions_df.to_sql(name = table, con = db_connection, if_exists = 'append', index = False)
+    
+    data_population_check = db_connection.execute('SELECT COUNT(id) AS row_count, MIN(id) AS min_id, MAX(id) AS max_id, COUNT(DISTINCT(payment_from)) AS user_count, COUNT(DISTINCT(payment_method)) AS payment_methods, COUNT(DISTINCT(status)) AS statuses FROM transactions;')
 
+    print(f"Data populated in '{database}.{table}' successfully!")
+    for row in data_population_check:
+        print("Table rows: ", row[0])
+        print("Table least id: ", row[1])
+        print("Table highest id: ", row[2])
+        print("Unique combinations: ", row[3], " users * ", row[4], " payment methods * ", row[5], " payment status values")
+
+    table_dump = db_connection.execute('SELECT * FROM transactions LIMIT 500;')
+
+    final_dump = pd.DataFrame(table_dump.fetchall())
+    final_dump.columns = table_dump.keys()
+
+    print(f"\n'{database}.{table}' looks like: ")
+    print(final_dump.head(5).to_string(index = False))
+
+    final_dump.to_csv('transactions.csv', index = False)
+    
