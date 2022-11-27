@@ -1,4 +1,4 @@
-# DE-Exercise
+# Data Engineering Exercise
 
 - *installation_steps* contains the command execute the different softwares.
 - After the installation, the database & table can be created through the DDL statements present in *db_table_creation*.
