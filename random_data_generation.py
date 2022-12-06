@@ -12,10 +12,10 @@ random_transactions = []
 
 # Connecting with the database
 user = 'root'
-password = 'mysql_PM_EC2_1' # Enter the password here
+password = '' # Enter the password here
 host = 'localhost'
 port = 3306
-database = 'epifi' # Enter the database name here
+database = 'payments_db' # Enter the database name here
 table = 'transactions'
 
 engine = sa.create_engine(url = f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}", echo = False)

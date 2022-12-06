@@ -1,9 +1,9 @@
 sqoop job \
 --create incrementalUpdateImportJob \
 -- import \
---connect jdbc:mysql://localhost/epifi \
+--connect jdbc:mysql://localhost/payments_db \
 --username hduser \
---password mysql_PM_EC2_1 \
+--password <ENTER PASSWORD HERE> \
 --table TRANSACTIONS \
 --direct \
 --target-dir /user/hduser/transactions_hdfs \
